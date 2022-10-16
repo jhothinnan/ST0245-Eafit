@@ -1,6 +1,9 @@
 import pandas as pd
 import sys
 import time
+import geopandas as gpd
+from shapely import wkt
+import matplotlib.pyplot as plt
 
 # ---------------------------------------------------------------------------------------------------#
 # Dataframe
@@ -21,27 +24,29 @@ for i in unique:
 # ---------------------------------------------------------------------------------------------------#
 # fill the values of the graph
 for i in data.index:
-    graph[data["origin"][i]][data["destination"][i]] = (data["length"][i])
-    # graph[data["origin"][i]][data["destination"][i]] = (data["harassmentRisk"][i])
-    # graph[data["origin"][i]][data["destination"][i]] = (data["length"][i], data["harassmentRisk"][i])
     # ---------------------------------------------------------------------------------------------------#
+    #Distance and risk weighting
+    # ---------------------------------------------------------------------------------------------------#
+    graph[data["origin"][i]][data["destination"][i]] = (((data["length"][i]*100)*(0.25*data["harassmentRisk"][i]))/10)
+    # ---------------------------------------------------------------------------------------------------#
+
     # If the value at oneway is true means that the destinations is also an origin, so create that origin in the graph
     if data['oneway'][i] == True:
-        graph[data['destination'][i]] = {data["origin"][i]: (data["length"][i])}
-        # graph[data['destination'][i]] = {data["origin"][i]: (data["harassmentRisk"][i])}
-        # graph[data['destination'][i]] = {data["origin"][i]: (data["length"][i], data["harassmentRisk"][i])}
-
+        # ---------------------------------------------------------------------------------------------------#
+        #Distance and risk weighting
+        # ---------------------------------------------------------------------------------------------------#
+        graph[data['destination'][i]] = {data["origin"][i]: (((data["length"][i]*100)*(0.25*data["harassmentRisk"][i]))/10)}
 
 # ---------------------------------------------------------------------------------------------------#
 
 # ---------------------------------------------------------------------------------------------------#
 # Dijkstra approach implementation
 def dijkstra(graph, start, goal):
-    shortest_distance = {}  # Almacena el costo de alcanzar el nodo. Se va cambiando mientras nos movemos en el grafo
-    track_predecesor = {}  # Conserva el camino que nos ha llevado hasta ese nodo
-    unseenNodes = graph  # Para iterar a traves del grafo
-    infinity = sys.maxsize  # Un numero muy grande
-    track_path = []  # Almacena el camino optimo
+    shortest_distance = {}                                  # Stores the cost of reaching the node. It changes as we move in the graph
+    track_predecesor = {}                                   # Preserve the path that has taken us to that node
+    unseenNodes = graph                                     # To iterate through the graph
+    infinity = sys.maxsize                                  # A very large number
+    track_path = []                                         # Store the optimal path
 
     for node in unseenNodes:
         shortest_distance[node] = infinity
@@ -73,15 +78,45 @@ def dijkstra(graph, start, goal):
     track_path.insert(0, start)
 
     if shortest_distance[goal] != infinity:
-        print('Shortest distance is', str(shortest_distance[goal]))
-        print('optimal path:', str(track_path))
+        return track_path
 
 
 # ---------------------------------------------------------------------------------------------------#
 # Execution and time register
 inicio = time.time()
-dijkstra(graph, '(-75.5937506, 6.2433334)', '(-75.6067194, 6.2053265)')
+ruta = (dijkstra(graph, '(-75.7161351, 6.3424055)', '(-75.7025278, 6.3425976)'))
 fin = time.time()
+# ---------------------------------------------------------------------------------------------------#
+
+
+#Make the route in the map
+
+area = pd.read_csv('poligono_de_medellin.csv',sep=';')
+area['geometry'] = area['geometry'].apply(wkt.loads)
+area = gpd.GeoDataFrame(area)
+
+#Load streets
+edges = pd.read_csv('calles_de_medellin_con_acoso.csv',sep=';')
+edges['harassmentRisk'] = edges['harassmentRisk'].fillna(edges['harassmentRisk'].mean())
+edges.loc[edges.harassmentRisk<50,'harassmentRisk']=0
+for i in range(len(ruta)-2):
+    edges.loc[(edges['origin'] == ruta[i]) & (edges['destination'] == ruta[i+1]),'harassmentRisk']=100
+edges = edges.loc[edges['harassmentRisk']>0]
+edges['geometry'] = edges['geometry'].apply(wkt.loads)
+edges = gpd.GeoDataFrame(edges)
+
+#Create plot
+fig, ax = plt.subplots(figsize=(12,8))
+
+# Plot the footprint
+area.plot(ax=ax, facecolor='black')
+
+# Plot street edges
+edges.plot(ax=ax, linewidth=1, column='harassmentRisk', color='white')
+
+plt.title("Riesgo de acoso en las calles de Medellín")
+plt.tight_layout()
+plt.savefig("mapa-de-la-ruta.png")
 # ---------------------------------------------------------------------------------------------------#
 # tests
 # print(graph)
