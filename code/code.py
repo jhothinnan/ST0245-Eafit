@@ -4,6 +4,7 @@ import time
 import geopandas as gpd
 from shapely import wkt
 import matplotlib.pyplot as plt
+import gmplot
 
 # ---------------------------------------------------------------------------------------------------#
 # Dataframe
@@ -117,6 +118,23 @@ edges.plot(ax=ax, linewidth=1, column='harassmentRisk', color='white')
 plt.title("Riesgo de acoso en las calles de Medellín")
 plt.tight_layout()
 plt.savefig("mapa-de-la-ruta.png")
+
+#Another way to create the path
+
+latitud = []
+longitud = []
+
+for i in range (0, len(ruta)):
+    temp = str(ruta[i])
+    longitud.append(float(temp[1:temp.find(',')]))
+    latitud.append(float(temp[temp.find(',')+2:len(temp)-1]))
+
+map = gmplot.GoogleMapPlotter(latitud[0],longitud[0],15)
+map.scatter(latitud,longitud,"# FF0000",size = 1, marker=False)
+map.plot(latitud,longitud,'white',edge_width = 3)
+map.draw('map.html')
+
+
 # ---------------------------------------------------------------------------------------------------#
 # tests
 # print(graph)
