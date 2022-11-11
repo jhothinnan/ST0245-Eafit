@@ -33,7 +33,7 @@ print(f'La ruta mas segura tiene una distancia de: {lengthSafest} y el riesgo me
 print(f'El tiempo de ejecucion del algorimo fue: {fin-inicio}')
 
 inicio = time.time()
-path, risk, length = dijkstra3(U_Nacional,Eafit,graph)
+path, risk, length = dijkstraMixed(U_Nacional,Eafit,graph)
 fin = time.time()
 lista = convertList(U_Nacional,Eafit,path)
 length = length

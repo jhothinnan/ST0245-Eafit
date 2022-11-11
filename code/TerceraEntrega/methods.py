@@ -71,7 +71,7 @@ def dijkstraHarrasment(start, goal, graph):
                 
     return visited, cost_visited[goal], cost_length[goal]
 
-def dijkstra3(start, goal, graph):
+def dijkstraMixed(start, goal, graph):
     queue = []
     heappush(queue, (0,0,0,start))
     cost_visited = {start: 0}
