@@ -11,11 +11,10 @@ def createGraphComplete(data):
         if data["oneway"][i]:
             graph[data["origin"][i]].append((data["harassmentRisk"][i],data["length"][i],data["destination"][i]))
             try:
-                graph[data["destination"][i]].append((data["harassmentRisk"][i],data["length"][i],data["destination"][i]))
+                graph[data["destination"][i]].append((data["harassmentRisk"][i],data["length"][i],data["origin"][i]))
             except KeyError:
                 destination = data["destination"][i]
-                origin = data["origin"][i]
-                graph[destination] = [(data["harassmentRisk"][i],data["length"][i],origin)]
+                graph[destination] = [(data["harassmentRisk"][i],data["length"][i],data["origin"][i])]
         else:
             graph[data["origin"][i]].append((data["harassmentRisk"][i],data["length"][i],data["destination"][i]))
     return graph
