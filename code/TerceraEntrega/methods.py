@@ -89,10 +89,7 @@ def dijkstra3(start, goal, graph):
             neigh_cost, neigh_len, neigh_node = next_node
             new_cost = cost_visited[cur_node] + neigh_cost
             new_len = cost_length[cur_node] + neigh_len
-            new_mix = new_len*new_cost
-            #new_mix = 50*(cost_length[cur_node] + neigh_len)*(100*(cost_visited[cur_node] + neigh_cost))
-            #new_mix = ((cost_length[cur_node] + neigh_len)*30)+((cost_visited[cur_node] + neigh_cost)*500)
-
+            new_mix = new_len + 80*new_cost
             if neigh_node not in cost_mix or new_mix < cost_mix[neigh_node]:
                 heappush(queue, (new_mix, cur_cost, cur_length, neigh_node))
                 cost_visited[neigh_node] = new_cost
@@ -138,7 +135,7 @@ def graficar(coordinaes_list, coordinates_harrasment, coordinates_length):
 
     map = gmplot.GoogleMapPlotter(latitude_1[0],longitude_1[0],15)
     map.scatter(latitude_1,longitude_1,"blue",size = 1, marker=False)
-    map.plot(latitude_1,longitude_1,'blue',edge_width = 10)
+    map.plot(latitude_1,longitude_1,'blue',edge_width = 4)
 
     for i in range (0, len(coordinates_harrasment)):
         temp = str(coordinates_harrasment[i])
@@ -146,7 +143,7 @@ def graficar(coordinaes_list, coordinates_harrasment, coordinates_length):
         latitude_2.append(float(temp[temp.find(',')+2:len(temp)-1]))
 
     map.scatter(latitude_2,longitude_2,"white",size = 1, marker=False)
-    map.plot(latitude_2,longitude_2,'white',edge_width = 7)
+    map.plot(latitude_2,longitude_2,'white',edge_width = 4)
 
     for i in range (0, len(coordinates_length)):
         temp = str(coordinates_length[i])
@@ -154,7 +151,7 @@ def graficar(coordinaes_list, coordinates_harrasment, coordinates_length):
         latitude_3.append(float(temp[temp.find(',')+2:len(temp)-1]))
 
     map.scatter(latitude_3,longitude_3,"yellow",size = 1, marker=False)
-    map.plot(latitude_3,longitude_3,'yellow',edge_width = 7)
+    map.plot(latitude_3,longitude_3,'yellow',edge_width = 4)
 
     map.draw('map.html')
 

@@ -18,7 +18,7 @@ inicio = time.time()
 pathShortest, riskShortest, lengthShortest = dijkstraLength(U_Nacional,Eafit,graph)
 fin = time.time()
 listShortest = convertList(U_Nacional,Eafit,pathShortest)
-lengthShortest = lengthShortest/1000
+lengthShortest = lengthShortest
 riskShortest = riskShortest/len(listShortest)
 print(f'La ruta mas corta tiene una distancia de: {lengthShortest} y el riesgo medio es de: {riskShortest}')
 print(f'El tiempo de ejecucion del algorimo fue: {fin-inicio}')
@@ -27,7 +27,7 @@ inicio = time.time()
 pathSafest, riskSafest, lengthSafest = dijkstraHarrasment(U_Nacional,Eafit,graph)
 fin = time.time()
 listSafest = convertList(U_Nacional,Eafit,pathSafest)
-lengthSafest = lengthSafest/1000
+lengthSafest = lengthSafest
 riskSafest = riskSafest/len(listSafest)
 print(f'La ruta mas segura tiene una distancia de: {lengthSafest} y el riesgo medio es de: {riskSafest}')
 print(f'El tiempo de ejecucion del algorimo fue: {fin-inicio}')
@@ -36,7 +36,7 @@ inicio = time.time()
 path, risk, length = dijkstra3(U_Nacional,Eafit,graph)
 fin = time.time()
 lista = convertList(U_Nacional,Eafit,path)
-length = length/1000
+length = length
 risk = risk/len(lista)
 print(f'La ruta promediada tiene una distancia de: {length} y el riesgo medio es de: {risk}')
 print(f'El tiempo de ejecucion del algorimo fue: {fin-inicio}')
