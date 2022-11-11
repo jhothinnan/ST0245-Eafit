@@ -99,17 +99,6 @@ def dijkstra3(start, goal, graph):
                 
     return visited, cost_visited[goal], cost_length[goal]
 
-
-
-
-
-
-
-
-
-
-
-
 def createDataFrame(archivo):
     data = pd.read_csv(archivo, sep = ';')
     average = data['harassmentRisk'].mean()
@@ -134,8 +123,8 @@ def graficar(coordinaes_list, coordinates_harrasment, coordinates_length):
         latitude_1.append(float(temp[temp.find(',')+2:len(temp)-1]))
 
     map = gmplot.GoogleMapPlotter(latitude_1[0],longitude_1[0],15)
-    map.scatter(latitude_1,longitude_1,"blue",size = 1, marker=False)
-    map.plot(latitude_1,longitude_1,'blue',edge_width = 4)
+    map.scatter(latitude_1,longitude_1,"red",size = 1, marker=False)
+    map.plot(latitude_1,longitude_1,'red',edge_width = 3)
 
     for i in range (0, len(coordinates_harrasment)):
         temp = str(coordinates_harrasment[i])
@@ -143,7 +132,7 @@ def graficar(coordinaes_list, coordinates_harrasment, coordinates_length):
         latitude_2.append(float(temp[temp.find(',')+2:len(temp)-1]))
 
     map.scatter(latitude_2,longitude_2,"white",size = 1, marker=False)
-    map.plot(latitude_2,longitude_2,'white',edge_width = 4)
+    map.plot(latitude_2,longitude_2,'white',edge_width = 2)
 
     for i in range (0, len(coordinates_length)):
         temp = str(coordinates_length[i])
@@ -151,31 +140,6 @@ def graficar(coordinaes_list, coordinates_harrasment, coordinates_length):
         latitude_3.append(float(temp[temp.find(',')+2:len(temp)-1]))
 
     map.scatter(latitude_3,longitude_3,"yellow",size = 1, marker=False)
-    map.plot(latitude_3,longitude_3,'yellow',edge_width = 4)
+    map.plot(latitude_3,longitude_3,'yellow',edge_width = 2)
 
     map.draw('map.html')
-
-
-'''def graficar(coordinates_harrasment, coordinates_length):
-    latitude_2, latitude_3 = list(), list()
-    longitude_2, longitude_3 = list(), list()
-    
-
-    for i in range (0, len(coordinates_harrasment)):
-        temp = str(coordinates_harrasment[i])
-        longitude_2.append(float(temp[1:temp.find(',')]))
-        latitude_2.append(float(temp[temp.find(',')+2:len(temp)-1]))
-
-    map = gmplot.GoogleMapPlotter(latitude_2[0],longitude_2[0],15)
-    map.scatter(latitude_2,longitude_2,"white",size = 1, marker=False)
-    map.plot(latitude_2,longitude_2,'white',edge_width = 3)
-
-    for i in range (0, len(coordinates_length)):
-        temp = str(coordinates_length[i])
-        longitude_3.append(float(temp[1:temp.find(',')]))
-        latitude_3.append(float(temp[temp.find(',')+2:len(temp)-1]))
-
-    map.scatter(latitude_3,longitude_3,"yellow",size = 1, marker=False)
-    map.plot(latitude_3,longitude_3,'yellow',edge_width = 3)
-
-    map.draw('map.html')'''
